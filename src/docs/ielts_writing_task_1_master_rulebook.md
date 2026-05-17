@@ -787,7 +787,108 @@ The AI should detect:
 
 ---
 
-# 16. AI SCORING RULES
+# 16. GRAMMAR & PARTS OF SPEECH RULES
+
+## 16.1 Subject-Verb Agreement
+
+The subject and verb must agree in number (singular/plural).
+
+- "The number of students increases..." ✓ / "The number of students increase..." ✗
+- "The figures show..." ✓ / "The figures shows..." ✗
+- "The data indicate..." ✓ (data can be plural)
+
+---
+
+## 16.2 Noun Usage
+
+- Countable vs uncountable: "many countries" ✓, "much information" ✓, "many informations" ✗
+- Plural forms: "the number of users" ✓, "the number of user" ✗
+- "The majority of students" ✓ / "A large amount of people" ✗ → "a large number of people"
+
+---
+
+## 16.3 Verb Usage
+
+- "Rose" is intransitive: "X rose" ✓ (NOT "X rised" or "X was rose")
+- "Raise" is transitive: "X raised Y" (needs an object) — "The government raised taxes" ✓
+- "stood at" ✓ / "standed at" ✗
+- After a preposition, use V-ing: "before increasing", "after reaching a peak", "by comparing"
+
+---
+
+## 16.4 Adjective Usage
+
+- Attributive (before noun): "a significant increase" ✓
+- Predicative (after linking verb): "the increase was significant" ✓
+- "a significantly rise" ✗ → "a significant rise" (adjective, not adverb)
+- "more higher" ✗ → "higher" (no double comparative)
+
+---
+
+## 16.5 Adverb Usage
+
+- Position before main verb: "The number gradually increased"
+- Position after verb: "The number increased gradually"
+- Before adjective: "a remarkably high figure"
+- "The number increased significant" ✗ → "increased significantly"
+- Adverb placement changes meaning: "almost increased to 200" ≠ "increased to almost 200"
+
+---
+
+## 16.6 Preposition Rules
+
+### Time Prepositions
+- in + year: in 2000
+- from ... to ...: from 2000 to 2020
+- between ... and ...: between 2000 and 2020 (NOT "between 2000 to 2020")
+- by + year: by 2010, by the end of the period
+- over/during + period: over the period, during this time
+
+### Prepositions with Data Verbs
+- stand at + number: stood at 50%
+- account for + percentage: accounted for 25%
+- rise to + final number: rose to 100
+- rise by + difference: rose by 50
+- rise from X to Y: rose from 50 to 100
+- reach a peak of + number: reached a peak of 80
+
+### Common Preposition Errors
+- "in the other hand" ✗ → "on the other hand"
+- "depend of" ✗ → "depend on"
+- "different with" ✗ → "different from"
+- "increase of 50%" (after noun: "an increase of 50%") vs "increase by 50%" (with verb: "increased by 50%")
+- "on 2000" ✗ → "in 2000"
+- "between 2000 to 2020" ✗ → "between 2000 and 2020" or "from 2000 to 2020"
+
+---
+
+## 16.7 Article Usage (a/an/the)
+
+- The + specific: "The number of users", "The line graph", "The highest figure"
+- A/An + general/first mention: "A significant increase", "An upward trend"
+- Zero article: "Data was collected", "Energy consumption", "In 2000"
+- "a overview" ✗ → "an overview"
+- Superlatives always take "the": "the highest", "the lowest", "the most significant"
+
+---
+
+## 16.8 AI Evaluation Rules
+
+The AI should check:
+
+- Subject-verb agreement (singular/plural matching)
+- Correct noun forms (countable vs uncountable, pluralization)
+- Verb form correctness (irregular verbs like rose/stood, verb after preposition → V-ing)
+- Adjective vs adverb distinction (modifying nouns vs verbs)
+- Adverb placement and meaning
+- Preposition accuracy (time, comparison, data description)
+- Article usage (a/an/the with data terms and superlatives)
+- "between...and..." vs "from...to..." distinction
+- "increase of" vs "increase by" distinction
+
+---
+
+# 17. AI SCORING RULES
 
 # 16.1 Task Achievement
 
@@ -834,7 +935,7 @@ The AI should evaluate:
 
 ---
 
-# 17. SIMPLIFIED BAND DESCRIPTORS
+# 18. SIMPLIFIED BAND DESCRIPTORS
 
 # Band 4–5
 
@@ -874,7 +975,7 @@ The AI should evaluate:
 
 ---
 
-# 18. AI FEEDBACK TEMPLATE
+# 19. AI FEEDBACK TEMPLATE
 
 ## 18.1 Overall Feedback
 
@@ -914,7 +1015,7 @@ Your essay demonstrates a clear understanding of the chart. However, there are s
 
 ---
 
-# 19. FINAL MASTER RULES FOR AI
+# 20. FINAL MASTER RULES FOR AI
 
 ## The AI MUST CHECK:
 
@@ -962,7 +1063,7 @@ Your essay demonstrates a clear understanding of the chart. However, there are s
 
 ---
 
-# 20. RECOMMENDED AI OUTPUT FORMAT
+# 21. RECOMMENDED AI OUTPUT FORMAT
 
 ```json
 {

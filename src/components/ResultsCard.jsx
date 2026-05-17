@@ -78,14 +78,38 @@ function IssueCard({ title, items, color, itemRender }) {
   )
 }
 
-export default function ResultsCard({ result }) {
+import AnnotatedAnswer from './AnnotatedAnswer'
+
+export default function ResultsCard({ result, answer, onReset }) {
   if (!result) return null
 
   const bs = result.band_score ?? {}
+  const annotations = result.annotations ?? []
 
   return (
     <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
       <h2 className="font-semibold text-lg mb-4">Feedback & Score</h2>
+
+      {/* Inline Corrections */}
+      {annotations.length > 0 && answer && (
+        <div className="mb-6">
+          <h3 className="font-semibold text-base mb-2">Inline Corrections</h3>
+          <div className="flex items-center gap-4 mb-3 text-xs text-gray-500">
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block w-3 h-3 rounded bg-green-100 border border-green-400" /> Đúng & tốt
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block w-3 h-3 rounded bg-amber-100 border border-amber-400" /> Có thể cải thiện
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block w-3 h-3 rounded bg-red-100 border border-red-400" /> Cần sửa
+            </span>
+          </div>
+          <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+            <AnnotatedAnswer text={answer} annotations={annotations} />
+          </div>
+        </div>
+      )}
 
       {/* Score grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
@@ -157,6 +181,18 @@ export default function ResultsCard({ result }) {
           </div>
         )}
       />
+
+      {onReset && (
+        <div className="mt-6 pt-4 border-t border-gray-200 text-center">
+          <button
+            onClick={onReset}
+            className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium cursor-pointer"
+          >
+            Write Again
+          </button>
+          <p className="text-xs text-gray-400 mt-1">Clear your answer and try a new response</p>
+        </div>
+      )}
     </section>
   )
 }

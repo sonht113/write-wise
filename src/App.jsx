@@ -48,6 +48,10 @@ RESPONSE REQUIREMENTS:
 - For every issue detected, reference the specific rule section (e.g., "Section 3.1", "Section 5.1").
 - Include Vietnamese explanations (explanation_vi) so students can understand the feedback clearly.
 - For each criterion, provide detailed issue analysis, how to fix it, and why (rule-based).
+- Generate an "annotations" array to provide word-by-word or phrase-by-phrase inline feedback on the student's answer. Annotate as many segments as possible. Each annotation must have a "type" field with one of three values:
+  "correct" — The phrasing is both accurate AND well-chosen for IELTS Task 1. No suggestion needed. Highlight green to reinforce good usage (e.g., proper use of "stood at", "accounted for", "witnessed", correct tense, good collocations).
+  "improvement" — The phrasing is grammatically correct but could be more natural, precise, academic, or varied based on the rulebook (Sections 5-14). Show the improved version in parentheses. Highlight yellow (e.g., "went up" → "rose", "a lot of" → "a significant amount of", repetitive vocabulary, simple structures that could be upgraded).
+  "incorrect" — The phrasing contains an error that must be fixed. This includes: wrong noun form (countable/uncountable, pluralization), wrong verb form (tense, irregular verb, verb after preposition), wrong adjective/adverb usage (adjective modifying verb, double comparative), wrong preposition (time, comparison, data prepositions), wrong article (a/an/the), subject-verb disagreement, or any grammar mistake from Section 16. Show the corrected version in parentheses. Highlight red (e.g., "between 2000 to 2020" → "between 2000 and 2020", "increased significant" → "increased significantly", "the number of user" → "the number of users").
 
 Use this JSON structure:
 {
@@ -88,6 +92,44 @@ Use this JSON structure:
       "explanation_vi": "Dữ liệu trong quá khứ cần dùng thì quá khứ. Section 13 yêu cầu sử dụng V2 cho dữ liệu đã qua."
     }
   },
+  "annotations": [
+    {
+      "original": "the line graph",
+      "improved": "the provided chart",
+      "type": "improvement",
+      "explanation_vi": "Mặc dù 'the line graph' đúng, nhưng 'the provided chart' nghe chuyên nghiệp và trang trọng hơn cho IELTS Writing Task 1."
+    },
+    {
+      "original": "illustrated",
+      "improved": "illustrates",
+      "type": "incorrect",
+      "explanation_vi": "Dữ liệu bao gồm cả quá khứ và dự báo tương lai, nên dùng thì hiện tại (present simple) thay vì quá khứ."
+    },
+    {
+      "original": "U.S. energy consumption",
+      "improved": "energy use in the United States",
+      "type": "improvement",
+      "explanation_vi": "Có thể paraphrase 'U.S. energy consumption' thành 'energy use in the United States' để tránh lặp từ với đề bài."
+    },
+    {
+      "original": "six fuel types",
+      "improved": "six different fuel categories",
+      "type": "improvement",
+      "explanation_vi": "'six different fuel categories' nghe học thuật hơn 'six fuel types'."
+    },
+    {
+      "original": "between 1980 to 2030",
+      "improved": "from 1980 to 2030",
+      "type": "incorrect",
+      "explanation_vi": "'Between... to...' là sai ngữ pháp. Đúng phải là 'between... and...' hoặc 'from... to...'."
+    },
+    {
+      "original": "2030.",
+      "improved": "2030, including projected figures.",
+      "type": "improvement",
+      "explanation_vi": "Nên thêm 'including projected figures' để làm rõ rằng số liệu bao gồm cả dự báo."
+    }
+  ],
   "strengths": ["Good overview", "Clear paragraph structure"],
   "weaknesses": ["Repetitive vocabulary", "Limited complex sentences"],
   "grammar_errors": [
@@ -172,11 +214,6 @@ export default function App() {
       setShowKeyModal(true);
       return;
     }
-    if (wordCount < 100) {
-      setError("Your answer is too short. Aim for at least 150 words.");
-      return;
-    }
-
     setLoading(true);
     setError("");
     setResult(null);
@@ -263,107 +300,115 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-        {/* Prompt */}
-        <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-lg">Prompt</h2>
-            <select
-              value={currentPrompt.id}
-              onChange={(e) => selectPrompt(e.target.value)}
-              className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 outline-0 focus:border-indigo-500"
-            >
-              {visiblePrompts.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.title}
-                </option>
-              ))}
-            </select>
-          </div>
-          <p className="text-sm text-gray-600 leading-relaxed">
-            {getDynamicDescription(chartData)}
-          </p>
-          <p className="text-sm text-gray-500 italic mt-2">
-            {currentPrompt.task}
-          </p>
-          <div className="mt-4">
-            <ChartRenderer prompt={chartData} onUpdate={setChartData} />
-          </div>
-        </section>
+      <main className="max-w-4xl lg:max-w-6xl mx-auto px-4 py-6">
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="flex-1 space-y-6 min-w-0">
+            {/* Prompt */}
+            <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="font-semibold text-lg">Prompt</h2>
+                <select
+                  value={currentPrompt.id}
+                  onChange={(e) => selectPrompt(e.target.value)}
+                  className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 outline-0 focus:border-indigo-500"
+                >
+                  {visiblePrompts.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {getDynamicDescription(chartData)}
+              </p>
+              <p className="text-sm text-gray-500 italic mt-2">
+                {currentPrompt.task}
+              </p>
+              <div className="mt-4">
+                <ChartRenderer prompt={chartData} onUpdate={setChartData} />
+              </div>
+            </section>
 
-        {/* Answer */}
-        <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-lg">Your Answer</h2>
-            <div className="flex items-center gap-3">
-              <label className="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer select-none">
-                <input type="checkbox" checked={timerOn} onChange={toggleTimer} className="cursor-pointer" />
-                Timer
-              </label>
-              {timerOn && (
-                <span className={`text-sm font-mono font-bold tabular-nums ${timeLeft <= 60 ? 'text-red-600' : 'text-indigo-600'}`}>
-                  {String(Math.floor(timeLeft / 60)).padStart(2, '0')}:{String(timeLeft % 60).padStart(2, '0')}
-                </span>
+            {/* Answer */}
+            <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="font-semibold text-lg">Your Answer</h2>
+                <div className="flex items-center gap-3">
+                  <label className="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer select-none">
+                    <input type="checkbox" checked={timerOn} onChange={toggleTimer} className="cursor-pointer" />
+                    Timer
+                  </label>
+                  {timerOn && (
+                    <span className={`text-sm font-mono font-bold tabular-nums ${timeLeft <= 60 ? 'text-red-600' : 'text-indigo-600'}`}>
+                      {String(Math.floor(timeLeft / 60)).padStart(2, '0')}:{String(timeLeft % 60).padStart(2, '0')}
+                    </span>
+                  )}
+                  <span className="text-sm font-medium text-gray-500">
+                    {wordCount} words
+                  </span>
+                </div>
+              </div>
+              <textarea
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                placeholder="Write your Task 1 answer here..."
+                rows={10}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-0 focus:border-indigo-500 resize-y"
+                disabled={loading}
+              />
+              <div className="flex gap-3 mt-3">
+                <button
+                  onClick={submitForAnalysis}
+                  disabled={loading || !answer.trim()}
+                  className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed text-sm font-medium flex items-center gap-2"
+                >
+                  {loading && (
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                  )}
+                  {loading ? "Analyzing..." : "Submit for Analysis"}
+                </button>
+                <button
+                  onClick={() => {
+                    setAnswer("");
+                    setResult(null);
+                    setError("");
+                  }}
+                  disabled={loading}
+                  className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                >
+                  Reset
+                </button>
+              </div>
+              {error && (
+                <div className="mt-3 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                  {error}
+                </div>
               )}
-              <span className={`text-sm font-medium ${wordCount < 150 ? "text-amber-600" : "text-green-600"}`}>
-                {wordCount} words {wordCount < 150 && "(min 150)"}
-              </span>
+            </section>
+          </div>
+
+          <div className="lg:w-[420px] xl:w-[480px] shrink-0">
+            <div className="lg:sticky lg:top-6">
+              <ResultsCard result={result} wordCount={wordCount} answer={answer} onReset={() => { setAnswer(""); setResult(null); setError(""); }} />
             </div>
           </div>
-          <textarea
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            placeholder="Write your Task 1 answer here..."
-            rows={10}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-0 focus:border-indigo-500 resize-y"
-            disabled={loading}
-          />
-          <div className="flex gap-3 mt-3">
-            <button
-              onClick={submitForAnalysis}
-              disabled={loading || !answer.trim()}
-              className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed text-sm font-medium flex items-center gap-2"
-            >
-              {loading && (
-                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  />
-                </svg>
-              )}
-              {loading ? "Analyzing..." : "Submit for Analysis"}
-            </button>
-            <button
-              onClick={() => {
-                setAnswer("");
-                setResult(null);
-                setError("");
-              }}
-              disabled={loading}
-              className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
-            >
-              Reset
-            </button>
-          </div>
-          {error && (
-            <div className="mt-3 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-        </section>
-
-        <ResultsCard result={result} wordCount={wordCount} />
+        </div>
       </main>
 
       <ModelSelector model={model} onChange={setModel} />
