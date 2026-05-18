@@ -44,24 +44,33 @@ export default function PieChartView({ prompt, onUpdate }) {
     if (draft) setDraft(next)
   }
 
+  const count = prompt.pieData.length
+  // Tính số cột: ≤2 → 2 cột, 3 → 3 cột, ≥4 → 2 cột trên mobile / 4 cột trên desktop
+  const gridClass =
+    count <= 2 ? 'grid grid-cols-2' :
+    count === 3 ? 'grid grid-cols-3' :
+    'grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4'
+
   return (
     <div>
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-6 py-4">
+      <div className={`${gridClass} gap-4 py-4`}>
         {prompt.pieData.map((group) => (
-          <div key={group.year} className="flex flex-col items-center">
+          <div key={group.year} className="flex flex-col items-center min-w-0">
             <div className="text-sm font-semibold text-gray-700 mb-2">{group.year}</div>
-            <ResponsiveContainer width={200} height={200}>
-              <PieChart>
-                <Pie data={group.data} cx="50%" cy="50%" innerRadius={45} outerRadius={85} paddingAngle={2} dataKey="value">
-                  {group.data.map((e, i) => <Cell key={i} fill={e.color} />)}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="flex flex-wrap justify-center gap-2 mt-2">
+            <div className="w-full aspect-square max-w-[180px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={group.data} cx="50%" cy="50%" innerRadius="40%" outerRadius="75%" paddingAngle={2} dataKey="value">
+                    {group.data.map((e, i) => <Cell key={i} fill={e.color} />)}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="flex flex-wrap justify-center gap-x-2 gap-y-1 mt-2 w-full">
               {group.data.map((e, i) => (
-                <div key={i} className="flex items-center gap-1 text-xs text-gray-600">
-                  <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: e.color }} />
+                <div key={i} className="flex items-center gap-1 text-xs text-gray-600 whitespace-nowrap">
+                  <span className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: e.color }} />
                   {e.name} {e.value}%
                 </div>
               ))}
