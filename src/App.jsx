@@ -7,6 +7,7 @@ import ChartRenderer from "./components/charts/ChartRenderer";
 import ResultsCard from "./components/ResultsCard";
 import ModelSelector from "./components/ModelSelector";
 import ApiKeyModal from "./components/ApiKeyModal";
+import HintDrawer from "./components/HintDrawer";
 
 const SYSTEM_KEY = import.meta.env.VITE_OPENROUTER_API_KEY
 
@@ -412,6 +413,7 @@ export default function App() {
       </main>
 
       <ModelSelector model={model} onChange={setModel} />
+      <HintDrawer chartType={currentPrompt?.chartType} />
     </div>
   );
 }
