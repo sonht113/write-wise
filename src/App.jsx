@@ -9,34 +9,37 @@ import ModelSelector from "./components/ModelSelector";
 import ApiKeyModal from "./components/ApiKeyModal";
 import HintDrawer from "./components/HintDrawer";
 
-const SYSTEM_KEY = import.meta.env.VITE_OPENROUTER_API_KEY
+const SYSTEM_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 
 function getDynamicDescription(data) {
   switch (data?.chartType) {
-    case 'line': {
-      const n = data.lines?.length ?? 0
-      const labels = data.data?.map((r) => r[data.xAxisKey]).filter(Boolean) ?? []
-      return `The line graph shows ${data.yAxisLabel ?? 'data'} for ${n} data series from ${labels[0] ?? '?'} to ${labels[labels.length - 1] ?? '?'}.`
+    case "line": {
+      const n = data.lines?.length ?? 0;
+      const labels =
+        data.data?.map((r) => r[data.xAxisKey]).filter(Boolean) ?? [];
+      return `The line graph shows ${data.yAxisLabel ?? "data"} for ${n} data series from ${labels[0] ?? "?"} to ${labels[labels.length - 1] ?? "?"}.`;
     }
-    case 'bar': {
-      const n = data.data?.length ?? 0
-      const groups = data.bars?.length ?? 0
-      return `The bar chart shows ${data.yAxisLabel ?? 'percentages'} for ${n} categories across ${groups} time periods.`
+    case "bar": {
+      const n = data.data?.length ?? 0;
+      const groups = data.bars?.length ?? 0;
+      return `The bar chart shows ${data.yAxisLabel ?? "percentages"} for ${n} categories across ${groups} time periods.`;
     }
-    case 'pie': {
-      const years = data.pieData?.length ?? 0
-      const segments = data.pieData?.[0]?.data?.length ?? 0
-      return `The pie charts show ${segments} categories of spending in ${years} different years.`
+    case "pie": {
+      const years = data.pieData?.length ?? 0;
+      const segments = data.pieData?.[0]?.data?.length ?? 0;
+      return `The pie charts show ${segments} categories of spending in ${years} different years.`;
     }
-    case 'table': {
-      const countries = data.tableData?.length ?? 0
-      const years = Object.keys(data.tableData?.[0] ?? {}).filter((k) => k !== 'country')
-      return `The table shows data for ${countries} countries from ${years[0] ?? '?'} to ${years[years.length - 1] ?? '?'}.`
+    case "table": {
+      const countries = data.tableData?.length ?? 0;
+      const years = Object.keys(data.tableData?.[0] ?? {}).filter(
+        (k) => k !== "country",
+      );
+      return `The table shows data for ${countries} countries from ${years[0] ?? "?"} to ${years[years.length - 1] ?? "?"}.`;
     }
     default:
-      return data?.description ?? ''
+      return data?.description ?? "";
   }
-};
+}
 
 const SYSTEM_PROMPT = `You are an expert IELTS examiner and writing tutor. Evaluate the student's IELTS Writing Task 1 answer.
 
@@ -288,10 +291,8 @@ export default function App() {
       )}
 
       <header className="bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-indigo-700">
-            IELTS WriteWise
-          </h1>
+        <div className="max-w-8xl mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 className="text-xl font-bold text-indigo-700">IELTS WriteWise</h1>
           <button
             onClick={() => setShowKeyModal(true)}
             className="text-sm text-gray-500 hover:text-indigo-600 underline cursor-pointer"
@@ -337,12 +338,20 @@ export default function App() {
                 <h2 className="font-semibold text-lg">Your Answer</h2>
                 <div className="flex items-center gap-3">
                   <label className="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer select-none">
-                    <input type="checkbox" checked={timerOn} onChange={toggleTimer} className="cursor-pointer" />
+                    <input
+                      type="checkbox"
+                      checked={timerOn}
+                      onChange={toggleTimer}
+                      className="cursor-pointer"
+                    />
                     Timer
                   </label>
                   {timerOn && (
-                    <span className={`text-sm font-mono font-bold tabular-nums ${timeLeft <= 60 ? 'text-red-600' : 'text-indigo-600'}`}>
-                      {String(Math.floor(timeLeft / 60)).padStart(2, '0')}:{String(timeLeft % 60).padStart(2, '0')}
+                    <span
+                      className={`text-sm font-mono font-bold tabular-nums ${timeLeft <= 60 ? "text-red-600" : "text-indigo-600"}`}
+                    >
+                      {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:
+                      {String(timeLeft % 60).padStart(2, "0")}
                     </span>
                   )}
                   <span className="text-sm font-medium text-gray-500">
@@ -406,7 +415,17 @@ export default function App() {
 
           <div className="lg:w-[420px] xl:w-[480px] shrink-0">
             <div className="lg:sticky lg:top-6">
-              <ResultsCard result={result} wordCount={wordCount} answer={answer} onReset={() => { setAnswer(""); setResult(null); setError(""); }} />
+              <ResultsCard
+                result={result}
+                wordCount={wordCount}
+                answer={answer}
+                loading={loading}
+                onReset={() => {
+                  setAnswer("");
+                  setResult(null);
+                  setError("");
+                }}
+              />
             </div>
           </div>
         </div>
