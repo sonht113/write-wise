@@ -138,6 +138,7 @@ function IssueCard({ title, items, color, itemRender }) {
 }
 
 import AnnotatedAnswer from "./AnnotatedAnswer";
+import exportResultToPDF from "../utils/pdfExporter";
 
 function EmptyState() {
   return (
@@ -212,7 +213,7 @@ function LoadingState() {
   );
 }
 
-function ResultsBody({ result, answer, onReset }) {
+function ResultsBody({ result, answer, onReset, onExportPDF }) {
   const bs = result.band_score ?? {};
   const annotations = result.annotations ?? [];
 
@@ -388,14 +389,37 @@ function ResultsBody({ result, answer, onReset }) {
       />
 
       {onReset && (
-        <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-          <button
-            onClick={onReset}
-            className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium cursor-pointer"
-          >
-            Write Again
-          </button>
-          <p className="text-xs text-gray-400 mt-1">
+        <div className="mt-6 pt-4 border-t border-gray-200 text-center space-y-3">
+          <div className="flex items-center justify-center gap-3">
+            <button
+              onClick={onReset}
+              className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium cursor-pointer"
+            >
+              Write Again
+            </button>
+            {onExportPDF && (
+              <button
+                onClick={onExportPDF}
+                className="px-4 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer flex items-center gap-1.5"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                Export PDF
+              </button>
+            )}
+          </div>
+          <p className="text-xs text-gray-400">
             Clear your answer and try a new response
           </p>
         </div>
@@ -409,7 +433,15 @@ export default function ResultsCard({
   answer,
   onReset,
   loading = false,
+  promptTitle,
+  chartType,
+  wordCount,
 }) {
+  const handleExportPDF = () => {
+    if (!result) return;
+    exportResultToPDF({ result, answer, chartType, promptTitle, wordCount });
+  };
+
   return (
     <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
       <h2 className="font-semibold text-lg mb-4">Feedback & Score</h2>
@@ -417,7 +449,12 @@ export default function ResultsCard({
       {loading ? (
         <LoadingState />
       ) : result ? (
-        <ResultsBody result={result} answer={answer} onReset={onReset} />
+        <ResultsBody
+          result={result}
+          answer={answer}
+          onReset={onReset}
+          onExportPDF={handleExportPDF}
+        />
       ) : (
         <EmptyState />
       )}
