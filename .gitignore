@@ -25,3 +25,6 @@ dist-ssr
 
 # Enviroments
 .env
+
+DEVELOPMENT_ROADMAP.md
+update_app.py
