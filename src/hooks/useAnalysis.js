@@ -1,6 +1,5 @@
 import { useState } from "react";
 import SYSTEM_PROMPT from "../prompts/systemPrompt";
-import getDynamicDescription from "../utils/chartDescription";
 
 export default function useAnalysis({
   activeKey,
@@ -40,7 +39,7 @@ export default function useAnalysis({
             { role: "system", content: SYSTEM_PROMPT },
             {
               role: "user",
-              content: `IELTS Writing Task 1 prompt:\n${getDynamicDescription(chartData)}\n${currentPrompt.task}\n\nStudent's answer:\n${answer}`,
+              content: `IELTS Writing Task 1 prompt:\n${currentPrompt.description}\n${currentPrompt.task}\n\nStudent's answer:\n${answer}`,
             },
           ],
           temperature: 0.3,

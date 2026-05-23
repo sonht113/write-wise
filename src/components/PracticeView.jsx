@@ -3,7 +3,6 @@ import ChartRenderer from "./charts/ChartRenderer";
 import ResultsCard from "./ResultsCard";
 import PromptSelector from "./PromptSelector";
 import GrammarPanel from "./GrammarPanel";
-import getDynamicDescription from "../utils/chartDescription";
 import useGrammarCheck from "../hooks/useGrammarCheck";
 
 export default function PracticeView({
@@ -103,7 +102,7 @@ export default function PracticeView({
             </div>
           </div>
           <p className="text-sm text-gray-600 leading-relaxed">
-            {getDynamicDescription(chartData)}
+            {currentPrompt.description}
           </p>
           <p className="text-sm text-gray-500 italic mt-2">
             {currentPrompt.task}
