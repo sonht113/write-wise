@@ -57,7 +57,7 @@ const prompts = [
     tags: ["spending", "household", "budget"],
     task: "Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
     description:
-      "The pie charts below show the average household spending in four categories in two different years: 2010 and 2020.",
+      "The pie charts below show the average household spending in four categories as a percentage of total spending in two different years: 2010 and 2020.",
     pieData: [
       {
         year: "2010",
@@ -355,7 +355,7 @@ const prompts = [
     tags: ["nutrition", "diet", "food"],
     task: "Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
     description:
-      "The bar chart below shows the average daily calorie intake from five food groups in three countries.",
+      "The bar chart below shows the average daily calorie intake (in kcal) from five food groups in three countries.",
     data: [
       { group: "Grains", Japan: 680, USA: 520, India: 810 },
       { group: "Meat & Fish", Japan: 310, USA: 580, India: 145 },
@@ -447,7 +447,7 @@ const prompts = [
     tags: ["government", "budget", "spending"],
     task: "Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
     description:
-      "The pie charts below show the government budget allocation by sector in a country in 2015 and 2023.",
+      "The pie charts below show the government budget allocation by sector as a percentage of total government spending in a country in 2015 and 2023.",
     pieData: [
       {
         year: "2015",
@@ -482,7 +482,7 @@ const prompts = [
     tags: ["smartphones", "market", "brands"],
     task: "Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
     description:
-      "The pie charts below show the global smartphone market share by brand in 2019 and 2023.",
+      "The pie charts below show the global smartphone market share (in percent) by brand in 2019 and 2023.",
     pieData: [
       {
         year: "2019",
